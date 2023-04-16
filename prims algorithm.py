@@ -141,3 +141,4 @@ print("\nThe minimum spanning tree contains the following arcs:")
 for arc in arcsInRoute:
     print(arc)
 print("\nTotal Length of Minimum Spanning Tree:", totalLength) 
+input ("\nPress Enter to Exit")
