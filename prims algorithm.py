@@ -1,23 +1,23 @@
 #global variables
 vertexList = []
-numVerticies = 0
+numVertices = 0
 
-#get the number of verticies in the network
-validNumVerticies = False
-while not validNumVerticies:
-    numVerticies = input("Enter the number of verticies in the network:  ")
+#get the number of vertices in the network
+validNumVertices = False
+while not validNumVertices:
+    numVertices = input("Enter the number of vertices in the network:  ")
     try:
-        numVerticies = int(numVerticies)
+        numVertices = int(numVertices)
     except:
-        print("\nThe number of verticies must be a positive integer.")
+        print("\nThe number of vertices must be a positive integer.")
     else:
-        if numVerticies <3:
-            print("\nThere must be more than 3 verticies in the network.\n")
+        if numVertices <3:
+            print("\nThere must be more than 3 vertices in the network.\n")
         else:
-            validNumVerticies = True
+            validNumVertics = True
 
 #fill vertexList with letters (starting from A) for each vertex in the network
-for num in range(numVerticies):
+for num in range(numVertices):
     vertexList.append(chr(65 + num))
 
 #get the arcs in the network
@@ -56,20 +56,20 @@ def validConnections(originalConnections):
         print("\nThere cannot be 0 connections")
         return False
 
-    connectedVerticies = []
-    connectedVerticies.append(connections[0][0])
-    connectedVerticies.append(connections[0][1])
+    connectedVertices = []
+    connectedVertices.append(connections[0][0])
+    connectedVertices.append(connections[0][1])
     del connections[0]
 
     for connection in connections:
-        if (connection[0] in connectedVerticies) and (connection[1] not in connectedVerticies):
-            connectedVerticies.append(connection[1])
-        elif (connection [1] in connectedVerticies) and (connection[0] not in connectedVerticies):
-            connectedVerticies.append(connection[0])
+        if (connection[0] in connectedVertices) and (connection[1] not in connectedVertices):
+            connectedVertices.append(connection[1])
+        elif (connection [1] in connectedVertices) and (connection[0] not in connectedVertices):
+            connectedVertices.append(connection[0])
 
     connected = True
     for vertex in vertexList:
-        if vertex not in connectedVerticies:
+        if vertex not in connectedVertices:
             print ("\nVertex " + vertex + " is not connected")
             connected = False
 
@@ -81,61 +81,61 @@ def validConnections(originalConnections):
 #find the minimum arc (to be the starting arc)
 def findMinLen(connections):
     minArcLen = 100**100
-    minArcVerticies = []
+    minArcVertices = []
     minArcIndex = 0
-    verticiesInRoute = []
+    verticesInRoute = []
     arcsInRoute = []
     index = 0
 
     for connection in connections:
         if connection[2] < minArcLen:
             minArcLen = connection[2]
-            minArcVerticies = [connection[0], connection[1]]
+            minArcVertices = [connection[0], connection[1]]
             minArcIndex = index
         index += 1
 
-    verticiesInRoute.append(minArcVerticies[0])
-    verticiesInRoute.append(minArcVerticies[1])
+    verticesInRoute.append(minArcVertices[0])
+    verticesInRoute.append(minArcVertices[1])
 
-    minArc = minArcVerticies[0] + minArcVerticies[1]
+    minArc = minArcVertices[0] + minArcVertices[1]
     arcsInRoute.append(minArc)
 
     del connections[minArcIndex]
 
-    return (minArcLen, verticiesInRoute, arcsInRoute, connections)
+    return (minArcLen, verticesInRoute, arcsInRoute, connections)
 
 #find the minimum spanning tree
-def findRoute (totalLength, verticiesInRoute, arcsInRoute, remainingConnections):
-    while len(verticiesInRoute) < numVerticies:
+def findRoute (totalLength, verticesInRoute, arcsInRoute, remainingConnections):
+    while len(verticesInRoute) < numVertices:
         tempMinArcLen = 100**100
-        tempMinArcVerticies = []
+        tempMinArcVertices = []
         tempMinArc = ""
         tempIndex = 0
         
-        for vertexInRoute in verticiesInRoute:
+        for vertexInRoute in verticesInRoute:
             for connection in remainingConnections:
-                if ((vertexInRoute == connection[0]) and (connection[1] not in verticiesInRoute)) or ((vertexInRoute == connection[1]) and (connection[0] not in verticiesInRoute)):
+                if ((vertexInRoute == connection[0]) and (connection[1] not in verticesInRoute)) or ((vertexInRoute == connection[1]) and (connection[0] not in verticesInRoute)):
                     if connection[2] < tempMinArcLen:
                         tempMinArcLen = connection[2]
-                        tempMinArcVerticies = [connection[0],connection[1]]
+                        tempMinArcVertices = [connection[0],connection[1]]
                         tempMinArcIndex = tempIndex
             tempIndex += 1
 
         totalLength += tempMinArcLen
-        if tempMinArcVerticies[0] in verticiesInRoute:
-            verticiesInRoute.append(tempMinArcVerticies[1])
+        if tempMinArcVertices[0] in verticiesInRoute:
+            verticesInRoute.append(tempMinArcVertices[1])
         else:
-            verticiesInRoute.append(tempMinArcVerticies[0])
+            verticesInRoute.append(tempMinArcVertices[0])
         del remainingConnections[tempMinArcIndex]
-        tempMinArc = tempMinArcVerticies[0] + tempMinArcVerticies[1]
+        tempMinArc = tempMinArcVertices[0] + tempMinArcVertices[1]
         arcsInRoute.append(tempMinArc)
 
     return (totalLength, arcsInRoute)
 
 #main program
 connections = getConnections(vertexList)
-minArcLen, verticiesInRoute, arcsInRoute, remainingConnections = findMinLen(connections)
-totalLength, arcsInRoute = findRoute(minArcLen, verticiesInRoute, arcsInRoute, remainingConnections)
+minArcLen, verticesInRoute, arcsInRoute, remainingConnections = findMinLen(connections)
+totalLength, arcsInRoute = findRoute(minArcLen, verticesInRoute, arcsInRoute, remainingConnections)
 
 print("\nThe minimum spanning tree contains the following arcs:")
 for arc in arcsInRoute:
